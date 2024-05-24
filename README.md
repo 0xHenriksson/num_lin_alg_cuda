@@ -19,7 +19,7 @@ Libraries:
 ## Kernel 1: Matrix times a Vector
 
 Let $a_j$ denote the $j$-th column of $A$, an $m$-vector. 
-Then we have $$b = Ax = \sum_{n}_{j=1} x_j a_j$$
+Then we have $$b = Ax = \sum_{n}_{j=1} x_{j} a_{j}$$
 
 
 
