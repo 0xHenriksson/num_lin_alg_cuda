@@ -15,15 +15,16 @@ Libraries:
 - cuDSS
 - THRUST
 
+TODO: 
+- Create a file for generating random matrices of different types ()
 
 ## Kernel 1: Matrix times a Vector
 
 Let $a_j$ denote the $j$-th column of $A$, an $m$-vector. 
-Then we have $$b = Ax = \sum_{n}^{j=1} x_{j} a_{j}$$
+Then we have $$b = Ax = \sum_{j=1}^{n} x_{j} a_{j}$$
 
 
 
 ## Kernel #: Computing Matrix Inverse
 
-### Math
 A nonsingular or invertible matrix is a square matrix that has a multiplicative inverse. In other words, if A is an invertible matrix, then there exists another matrix B such that A × B = B × A = I, where I is the identity matrix. The inverse of A is typically denoted as A^(-1). For a matrix to be invertible, it must be square (i.e., have the same number of rows and columns) and have a non-zero determinant. The determinant is a scalar value that can be computed from the elements of a square matrix and provides information about the matrix's properties. If the determinant of a matrix is zero, the matrix is singular or non-invertible.

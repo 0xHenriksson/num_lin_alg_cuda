@@ -5,6 +5,20 @@
 #include <cstdlib>
 #include <iomanip>
 
+struct matrix {
+    int m;
+    int n;
+    int type;
+    float* data;
+    bool is_square;
+    bool is_symmetric;
+};
+
+struct vector {
+    int size;
+    float* data;
+};
+
 float get_sec() {
     struct timeval time;
     gettimeofday(&time, NULL);
@@ -75,7 +89,6 @@ void zero_init_matrix(float *mat, int N) {
     }
 }
 
-void create_random_nonsingular_matrix
 
 void copy_matrix(const float *src, float *dest, int N) {
     int i;
@@ -102,3 +115,56 @@ void print_matrix(const float *A, int M, int N, std::ofstream &fs) {
         fs << "]\n";
     }
 }
+
+// compute matrix dims
+// return array of [m, n, (1 for square, 2 for non-square)]
+int* compute_matrix_dims(int m, int n) {
+    int* dims = new int[3];
+    dims[0] = m;
+    dims[1] = n;
+    dims[2] = (m == n) ? 1 : 2;
+    return dims;
+}
+
+
+// generate the appropriate matrix on device, using cuRAND when appropriate
+void generateMatrix(float* matrix, m , n, is_square, is_symmetric) {
+
+    // allocate memory for the matrix on the device
+    float *d_matrix;
+    cudaMalloc((void**)&d_matrix, m * n * sizeof(float));
+    // create the cuRAND generator
+    curandGenerator_t gen;
+    curandCreateGenerator(&gen, CURAND_RNG_PSEUDO_DEFAULT);
+    curandSetPseudoRandomGeneratorSeed(gen, 1234ULL);
+
+    if (is_square) {
+        if (is_symmetric) {
+            // generate symmetric square matrix using cuRAND
+            curandGenerateUniform(gen, d_matrix, m * n);
+            curandDestroyGenerator(gen);
+        } else {
+            // generate nonsymmetric square matrix using cuRAND
+            // TODO: this isn't done yet
+            curandGenerateUniform(gen, d_matrix, m * n);
+            curandDestroyGenerator(gen);
+            // copy to from device to host
+            float *h_matrix = (float*)malloc(m * n * sizeof(float));
+            cudaMemcpy(h_matrix, d_matrix, m * n * sizeof(float), cudaMemcpyDeviceToHost);
+            cudaFree(d_matrix);
+        }
+    } else {
+        // generate nonsquare matrix without curand on the device
+        float *h_matrix = (float*)malloc(m * n * sizeof(float));
+        for (int i = 0; i < m * n; i++) {
+            h_matrix[i] = (float)rand() / RAND_MAX;
+        }
+        // copy the matrix from device to host 
+        cudaMemcpy(d_matrix, h_matrix, m * n * sizeof(float), cudaMemcpyHostToDevice);
+        cudaFree(d_matrix);
+
+    }
+}
+
+// calls the matrix-vector multiplication kernel
+void run_matrix_vector_mul_kernel(matrix, vector) 
